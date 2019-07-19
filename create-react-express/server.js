@@ -4,9 +4,8 @@ const PORT = process.env.PORT || 3001;
 const app = express();
 const mongoose = require("mongoose");
 const MONGODBI_URI =
-  process.env.MONGODBI_URI ||
-  "mongodb://heroku_ph1n9006:c5v3ru1i6ndf8kkj2qfdap69pf@ds151997.mlab.com:51997/heroku_ph1n9006";
-mongoose.connect("mongodb://localhost/googlebooks", { useNewUrlParser: true });
+  process.env.MONGODBI_URI || "mongodb://localhost/googlebooks";
+mongoose.connect(MONGODBI_URI, { useNewUrlParser: true });
 var Schema = mongoose.Schema;
 
 var bookSchema = new Schema({
