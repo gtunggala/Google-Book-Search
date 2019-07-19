@@ -8,26 +8,23 @@ class BookSearch extends React.Component {
   };
 
   handleInputChange = event => {
-    this.setState({ query: event.target.vlaue });
+    this.setState({ query: event.target.value });
   };
 
   searchForBooks = event => {
     event.preventDefault();
 
     axios
-      .get(
-        `https://www.googleapis.com/books/v1/volumes?q=search+termsq=${
-          this.state.query
-        }`
-      )
+      .get(`https://www.googleapis.com/books/v1/volumes?q=${this.state.query}`)
       .then(response => {
-        console.log(response);
+        console.log(response.data.items);
         this.setState({ results: response.data.items });
       })
       .catch(error => {
-        console.log(error);
+        console.error(error);
       });
   };
+
   render() {
     return (
       <div>
@@ -35,11 +32,27 @@ class BookSearch extends React.Component {
           <label htmlFor="search">Book Search</label>
           <input id="search" type="text" onChange={this.handleInputChange} />
 
-          <button>Search</button>
+          <button type="submit">Search</button>
         </form>
         <hr />
         {this.state.results.map(result => {
-          return <div key={result.id}>{result.selfLink}</div>;
+          return (
+            <div key={result.id}>
+              <h2>{result.volumeInfo.title}</h2>
+              {result.volumeInfo.authors.map(author => {
+                return <p key={author}>{author}</p>;
+              })}
+              <p>{result.volumeInfo.description}</p>
+              <a
+                target="_blank"
+                rel="noopener noreferrer"
+                href={result.volumeInfo.previewLink}
+              >
+                View
+              </a>
+              <button>Save</button>
+            </div>
+          );
         })}
       </div>
     );
