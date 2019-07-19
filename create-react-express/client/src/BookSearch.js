@@ -25,6 +25,16 @@ class BookSearch extends React.Component {
       });
   };
 
+  saveBook = book => {
+    axios.post("/api/books", {
+      title: book.volumeInfo.title,
+      authors: book.volumeInfo.authors,
+      description: book.volumeInfo.description,
+      image: book.volumeInfo.imageLinks.thumbnail,
+      link: book.volumeInfo.previewlink
+    });
+  };
+
   render() {
     return (
       <div>
@@ -39,9 +49,10 @@ class BookSearch extends React.Component {
           return (
             <div key={result.id}>
               <h2>{result.volumeInfo.title}</h2>
-              {result.volumeInfo.authors.map(author => {
-                return <p key={author}>{author}</p>;
-              })}
+              {result.volumeInfo.authors &&
+                result.volumeInfo.authors.map(author => {
+                  return <p key={author}>{author}</p>;
+                })}
               <p>{result.volumeInfo.description}</p>
               <a
                 target="_blank"
@@ -50,7 +61,7 @@ class BookSearch extends React.Component {
               >
                 View
               </a>
-              <button>Save</button>
+              <button onClick={() => this.saveBook(result)}>Save</button>
             </div>
           );
         })}
